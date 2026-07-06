@@ -137,11 +137,3 @@ body {
     border-radius: 4px;
 }
 
-.footer {
-    text-align: right;
-    margin-top: var(--margin-standard);
-    padding-top: 20px;
-    border-top: 1px solid var(--grid-border);
-    color: #666;
-    font-size: 0.9rem;
-}
