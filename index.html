@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimum Batcher</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <h1>Optimum Batcher</h1>
+        <div class="stats">
+            <div class="stat-box">Час: <span id="timer">60</span>с</div>
+            <div class="stat-box">Рахунок: <span id="score">0</span></div>
+        </div>
+    </header>
+
+    <main class="game-container">
+        <!-- Зона персонажа -->
+        <aside class="character-zone">
+            <img src="assets/character.png" alt="Ведучий" id="character-img" onerror="this.style.display='none'">
+            <p id="character-message">Пакуй транзакції в блок!</p>
+        </aside>
+
+        <!-- Ігрове поле (Блок мережі) -->
+        <section class="board-zone">
+            <div id="game-board"></div>
+        </section>
+
+        <!-- Зона фігур (Транзакції) -->
+        <aside class="shapes-zone">
+            <h3>Мемпул (Черга)</h3>
+            <div id="shape-pool"></div>
+        </aside>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
