@@ -1,0 +1,147 @@
+:root {
+    --bg-color: #0f1115;
+    --text-color: #ffffff;
+    --grid-bg: #1e222a;
+    --grid-border: #2d333b;
+    --accent-color: #00ff66; /* Колір для заповнених блоків Optimum */
+    --shape-color: #00bfff;
+    --margin-standard: 40px; /* Великі відступи від країв */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace; /* Строгий моноширинний шрифт */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: var(--margin-standard);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--margin-standard);
+    border-bottom: 1px solid var(--grid-border);
+    padding-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.stats {
+    display: flex;
+    gap: 30px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.game-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex: 1;
+    gap: 50px;
+}
+
+.character-zone {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.character-zone img {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.board-zone {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+}
+
+/* Ігрове поле 6x6 */
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(6, 60px);
+    grid-template-rows: repeat(6, 60px);
+    gap: 2px;
+    background-color: var(--grid-border);
+    border: 4px solid var(--grid-border);
+    border-radius: 8px;
+}
+
+.cell {
+    width: 60px;
+    height: 60px;
+    background-color: var(--grid-bg);
+    transition: background-color 0.2s;
+}
+
+.cell.filled {
+    background-color: var(--accent-color);
+}
+
+.cell.hover {
+    background-color: #3e4451;
+}
+
+.shapes-zone {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.shapes-zone h3 {
+    margin-bottom: 20px;
+    color: #888;
+}
+
+#shape-pool {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Фігури, які перетягуються */
+.draggable-shape {
+    display: grid;
+    gap: 2px;
+    cursor: grab;
+    background-color: transparent;
+}
+
+.draggable-shape:active {
+    cursor: grabbing;
+}
+
+.shape-block {
+    width: 60px;
+    height: 60px;
+    background-color: var(--shape-color);
+    border-radius: 4px;
+}
+
+.footer {
+    text-align: right;
+    margin-top: var(--margin-standard);
+    padding-top: 20px;
+    border-top: 1px solid var(--grid-border);
+    color: #666;
+    font-size: 0.9rem;
+}
