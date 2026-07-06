@@ -3,137 +3,93 @@
     --text-color: #ffffff;
     --grid-bg: #1e222a;
     --grid-border: #2d333b;
-    --accent-color: #00ff66; /* Колір для заповнених блоків Optimum */
-    --shape-color: #00bfff;
-    --margin-standard: 40px; /* Великі відступи від країв */
+    --accent-color: #00ff66; 
+    --margin-standard: 40px; 
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'Courier New', Courier, monospace; /* Строгий моноширинний шрифт */
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    font-family: 'Courier New', Courier, monospace; 
+    display: flex; flex-direction: column; min-height: 100vh;
     padding: var(--margin-standard);
+    user-select: none; 
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--margin-standard);
-    border-bottom: 1px solid var(--grid-border);
-    padding-bottom: 20px;
+/* --- СТИЛІ МЕНЮ ВВОДУ ІМЕНІ --- */
+.modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 17, 21, 0.95);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
 }
-
-.header h1 {
-    font-size: 2rem;
+.modal.hidden { display: none; }
+.modal-content {
+    background: var(--grid-bg); padding: 40px;
+    border: 1px solid var(--grid-border); text-align: center;
+}
+.modal-content input {
+    padding: 12px; margin: 20px 0; width: 100%;
+    background: #0f1115; color: white; border: 1px solid var(--grid-border);
+    font-family: inherit; font-size: 1rem; text-align: center;
+}
+.modal-content button {
+    padding: 12px 24px; cursor: pointer;
+    background: var(--accent-color); color: #000; border: none; 
+    font-weight: bold; font-family: inherit; font-size: 1rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
 }
+.modal-content button:hover { opacity: 0.8; }
 
-.stats {
-    display: flex;
-    gap: 30px;
-    font-size: 1.5rem;
-    font-weight: bold;
+/* --- ОСНОВНА ГРА --- */
+.header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: var(--margin-standard); border-bottom: 1px solid var(--grid-border); padding-bottom: 20px;
 }
+.header h1 { font-size: 2rem; text-transform: uppercase; letter-spacing: 2px; }
+.stats { display: flex; gap: 30px; font-size: 1.2rem; font-weight: bold; }
 
-.game-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex: 1;
-    gap: 50px;
+.game-container { display: flex; justify-content: space-between; align-items: flex-start; flex: 1; gap: 50px; }
+
+/* Ліва зона (Персонаж + Лідери) */
+.left-zone { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.left-zone img { max-width: 150px; height: auto; margin-bottom: 30px; }
+
+.leaderboard-container {
+    width: 100%; background: var(--grid-bg); border: 1px solid var(--grid-border);
+    padding: 20px; text-align: left;
 }
+.leaderboard-container h3 { margin-bottom: 15px; color: var(--accent-color); font-size: 1rem; text-transform: uppercase; border-bottom: 1px solid var(--grid-border); padding-bottom: 10px; }
+#leaderboard-list { list-style: none; font-size: 0.9rem; line-height: 1.8; }
+#leaderboard-list li { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding: 5px 0; }
+#leaderboard-list li span:last-child { color: var(--accent-color); font-weight: bold; }
 
-.character-zone {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.character-zone img {
-    max-width: 200px;
-    height: auto;
-    margin-bottom: 20px;
-}
-
-.board-zone {
-    flex: 2;
-    display: flex;
-    justify-content: center;
-}
-
-/* Ігрове поле 6x6 */
+.board-zone { flex: 2; display: flex; justify-content: center; }
 #game-board {
-    display: grid;
-    grid-template-columns: repeat(6, 60px);
-    grid-template-rows: repeat(6, 60px);
-    gap: 2px;
-    background-color: var(--grid-border);
-    border: 4px solid var(--grid-border);
-    border-radius: 8px;
+    display: grid; grid-template-columns: repeat(6, 60px); grid-template-rows: repeat(6, 60px);
+    gap: 2px; background-color: var(--grid-border); border: 4px solid var(--grid-border); cursor: crosshair;
+}
+.cell { width: 60px; height: 60px; background-color: var(--grid-bg); transition: background-color 0.1s; }
+.cell.hover-error { background-color: #ff3333 !important; }
+.cell.hover-ok { background-color: #3e4451; }
+
+.shapes-zone { flex: 1; display: flex; flex-direction: column; align-items: center; }
+.shapes-zone h3 { margin-bottom: 20px; color: #888; text-transform: uppercase; }
+#shape-pool { display: flex; flex-direction: column; gap: 20px; }
+
+/* Фігури */
+.clickable-shape { display: grid; gap: 2px; cursor: pointer; transition: transform 0.1s; }
+.clickable-shape:hover { transform: scale(1.05); }
+.shape-block { width: 60px; height: 60px; } 
+
+#ghost-shape {
+    position: fixed; pointer-events: none; z-index: 999;
+    opacity: 0.9; display: none; gap: 2px;
 }
 
-.cell {
-    width: 60px;
-    height: 60px;
-    background-color: var(--grid-bg);
-    transition: background-color 0.2s;
+.footer {
+    text-align: right; margin-top: var(--margin-standard);
+    padding-top: 20px; border-top: 1px solid var(--grid-border); color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
 }
-
-.cell.filled {
-    background-color: var(--accent-color);
-}
-
-.cell.hover {
-    background-color: #3e4451;
-}
-
-.shapes-zone {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.shapes-zone h3 {
-    margin-bottom: 20px;
-    color: #888;
-}
-
-#shape-pool {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Фігури, які перетягуються */
-.draggable-shape {
-    display: grid;
-    gap: 2px;
-    cursor: grab;
-    background-color: transparent;
-}
-
-.draggable-shape:active {
-    cursor: grabbing;
-}
-
-.shape-block {
-    width: 60px;
-    height: 60px;
-    background-color: var(--shape-color);
-    border-radius: 4px;
-}
-
