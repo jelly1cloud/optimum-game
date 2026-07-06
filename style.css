@@ -18,7 +18,7 @@ body {
     user-select: none; 
 }
 
-/* --- СТИЛІ МЕНЮ ВВОДУ ІМЕНІ --- */
+/* --- МОДАЛЬНЕ ВІКНО --- */
 .modal {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(15, 17, 21, 0.95);
@@ -43,7 +43,7 @@ body {
 }
 .modal-content button:hover { opacity: 0.8; }
 
-/* --- ОСНОВНА ГРА --- */
+/* --- ІНТЕРФЕЙС ГРИ --- */
 .header {
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: var(--margin-standard); border-bottom: 1px solid var(--grid-border); padding-bottom: 20px;
@@ -53,43 +53,59 @@ body {
 
 .game-container { display: flex; justify-content: space-between; align-items: flex-start; flex: 1; gap: 50px; }
 
-/* Ліва зона (Персонаж + Лідери) */
 .left-zone { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
-.left-zone img { max-width: 150px; height: auto; margin-bottom: 30px; }
+.left-zone img { max-width: 150px; height: auto; margin-bottom: 30px; border-radius: 4px; }
 
-.leaderboard-container {
-    width: 100%; background: var(--grid-bg); border: 1px solid var(--grid-border);
-    padding: 20px; text-align: left;
-}
+.leaderboard-container { width: 100%; background: var(--grid-bg); border: 1px solid var(--grid-border); padding: 20px; text-align: left; }
 .leaderboard-container h3 { margin-bottom: 15px; color: var(--accent-color); font-size: 1rem; text-transform: uppercase; border-bottom: 1px solid var(--grid-border); padding-bottom: 10px; }
 #leaderboard-list { list-style: none; font-size: 0.9rem; line-height: 1.8; }
 #leaderboard-list li { display: flex; justify-content: space-between; border-bottom: 1px dashed #333; padding: 5px 0; }
 #leaderboard-list li span:last-child { color: var(--accent-color); font-weight: bold; }
 
-.board-zone { flex: 2; display: flex; justify-content: center; }
-#game-board {
+/* ЗОНА БЛОКІВ */
+.board-zone { 
+    flex: 2; display: flex; justify-content: center; 
+}
+#boards-container {
+    display: flex; flex-direction: column; gap: 25px;
+    max-height: 620px; overflow-y: auto; padding-right: 15px;
+    scroll-behavior: smooth;
+}
+
+.game-board {
     display: grid; grid-template-columns: repeat(6, 60px); grid-template-rows: repeat(6, 60px);
     gap: 2px; background-color: var(--grid-border); border: 4px solid var(--grid-border); cursor: crosshair;
+    transition: opacity 0.4s; shrink: 0;
 }
+.game-board.archived {
+    opacity: 0.35; pointer-events: none; cursor: default;
+}
+
 .cell { width: 60px; height: 60px; background-color: var(--grid-bg); transition: background-color 0.1s; }
 .cell.hover-error { background-color: #ff3333 !important; }
 .cell.hover-ok { background-color: #3e4451; }
+
+/* ФІНАЛЬНА ІЛЮСТРАЦІЯ */
+.cell.end-empty { 
+    background-color: #ff3333 !important; 
+    animation: flashRed 0.6s ease-in-out infinite alternate; 
+}
+.cell.end-filled { 
+    background-color: #00ff66 !important; 
+}
+
+@keyframes flashRed {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
 
 .shapes-zone { flex: 1; display: flex; flex-direction: column; align-items: center; }
 .shapes-zone h3 { margin-bottom: 20px; color: #888; text-transform: uppercase; }
 #shape-pool { display: flex; flex-direction: column; gap: 20px; }
 
-/* Фігури */
 .clickable-shape { display: grid; gap: 2px; cursor: pointer; transition: transform 0.1s; }
 .clickable-shape:hover { transform: scale(1.05); }
 .shape-block { width: 60px; height: 60px; } 
 
-#ghost-shape {
-    position: fixed; pointer-events: none; z-index: 999;
-    opacity: 0.9; display: none; gap: 2px;
-}
-
-.footer {
-    text-align: right; margin-top: var(--margin-standard);
-    padding-top: 20px; border-top: 1px solid var(--grid-border); color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
-}
+#ghost-shape { position: fixed; pointer-events: none; z-index: 999; opacity: 0.9; display: none; gap: 2px; }
+.footer { text-align: right; margin-top: var(--margin-standard); padding-top: 20px; border-top: 1px solid var(--grid-border); color: #666; font-size: 0.9rem; text-transform: uppercase; }
